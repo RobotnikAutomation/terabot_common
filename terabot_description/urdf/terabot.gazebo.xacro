@@ -1,0 +1,78 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://ros.org/wiki/xacro">
+
+  <xacro:macro name="terabot_gazebo" params="name">
+	  <gazebo reference="${name}_0_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+	  
+	  <gazebo reference="${name}_1_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_2_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_3_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_4_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_5_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_6_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_7_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_8_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_9_link">
+		<material>Gazebo/Grey</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_91_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+
+	  <gazebo reference="${name}_92_link">
+		<material>Gazebo/Black</material>
+		<gravity>true</gravity>
+	  </gazebo>
+  </xacro:macro>
+  
+  <xacro:macro name="ros_control" params="namespace">
+		<gazebo>
+			<plugin name="ros_control" filename="libgazebo_ros_control.so">
+				<robotNamespace>${namespace}</robotNamespace>
+				<robotParam>robot_description</robotParam>
+				<controlPeriod>0.001</controlPeriod>
+				<robotSimType>gazebo_ros_control/DefaultRobotHWSim</robotSimType>
+			</plugin>
+		</gazebo>
+  </xacro:macro>
+	 
+
+</robot>

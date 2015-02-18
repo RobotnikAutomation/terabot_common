@@ -1,0 +1,42 @@
+<?xml version="1.0"?>
+<robot name="terabot_arm" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find terabot_description)/urdf/terabot.urdf.xacro" />
+  <xacro:include filename="$(find terabot_description)/urdf/terabot.gazebo.xacro" />
+
+  <!-- Used for fixing robot to Gazebo 'base_link' -->
+  <link name="world"/>
+  <joint name="fwf" type="fixed">
+    <parent link="world"/>
+    <child link="base_footprint"/>
+  </joint>
+
+  <!-- BASE FOOTPRINT -->
+  <link name="base_footprint">
+      <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+             <box size="0.001 0.001 0.001" />
+          </geometry>
+      </visual>
+
+      <collision>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+            <box size="0.001 0.001 0.001" />
+         </geometry>
+     </collision>
+  </link>
+
+  <joint name="base_footprint_joint" type="fixed">
+     <!-- origin xyz="0 0 0.050" rpy="0 0 0" / -->
+     <origin xyz="0 0 0.50" rpy="0 0 0" />
+     <parent link="base_footprint"/>
+     <child link="terabot_0_link" />
+  </joint>
+  
+  <xacro:terabot name="terabot" parent="base_footprint" />
+  <xacro:ros_control namespace="/terabot"/>
+
+</robot>

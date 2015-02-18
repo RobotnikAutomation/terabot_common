@@ -1,0 +1,784 @@
+<?xml version="1.0"?>
+<robot name="terabot" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
+
+   <!-- TERABOT_ARM -->
+   
+  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
+  <xacro:include filename="$(find terabot_description)/urdf/terabot.gazebo.xacro" />
+  <!--xacro:include filename="$(find terabot_description)/urdf/tcp.urdf.xacro" /-->
+
+
+  <!-- Constants for robot dimensions -->
+  <xacro:property name="PI" value="3.1415926535897931"/>
+
+  <xacro:property name="j1_mechanical_reduction" value="250.0"/>
+  <xacro:property name="j1_motor_torque_constant" value="5.0"/>
+  <xacro:property name="j2_mechanical_reduction" value="250.0"/>
+  <xacro:property name="j2_motor_torque_constant" value="5.0"/>
+  <xacro:property name="j5_mechanical_reduction" value="250.0"/>
+  <xacro:property name="j5_motor_torque_constant" value="5.0"/>
+  <xacro:property name="j8_mechanical_reduction" value="1"/>
+  <xacro:property name="j8_motor_torque_constant" value="1"/>
+  <xacro:property name="j9_mechanical_reduction" value="250.0"/>
+  <xacro:property name="j9_motor_torque_constant" value="5.0"/>
+  <xacro:property name="finger_mechanical_reduction" value="1.0"/>
+  <xacro:property name="finger_motor_torque_constant" value="1.0"/>
+  <xacro:property name="joint_effort_limit" value="100.0"/>
+  <xacro:property name="joint_velocity_limit" value="3.0"/>
+  <xacro:property name="joint_damping" value="0.5"/>
+  <xacro:property name="joint_friction" value="0.5"/>
+  
+  <xacro:macro name="terabot" params="parent name">  
+
+	  <link
+		name="${name}_0_link">
+		<inertial>
+		  <origin
+			xyz="-0.047561 0.016332 0.034298"
+			rpy="0 0 0" />
+		  <mass
+			value="1.2184" />
+		  <inertia
+			ixx="0.0020966"
+			ixy="-0.00096397"
+			ixz="-0.00095822"
+			iyy="0.0070416"
+			iyz="0.00034897"
+			izz="0.0066046" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/base_link_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.79216 0.81961 0.93333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/base_link_terabot.dae" />
+		  </geometry>
+		</collision>
+	  </link>
+		
+	  <joint
+		name="${name}_0_joint"
+		type="fixed">
+		<origin
+		  xyz="0.0 0.0 0.0"
+		  rpy="0.0 0.0 0.0" />
+		<parent
+		  link="${parent}" />
+		<child
+		  link="${name}_0_link" />
+		<axis
+		  xyz="0 0 0" />
+	  </joint>
+
+	  <link 
+		name="${name}_1_link">
+		<inertial>
+		  <origin
+			xyz="-7.6546E-08 0.040344 -0.04514"
+			rpy="0 0 0" />
+		  <mass
+			value="0.69822" />
+		  <inertia
+			ixx="0.0020624"
+			ixy="-1.4864E-10"
+			ixz="-4.1417E-11"
+			iyy="0.0013995"
+			iyz="0.00069864"
+			izz="0.0011909" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link1_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0 0 1 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link1_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_1_joint"
+		type="revolute">
+		<origin
+		  xyz="0 0 0.19178"
+		  rpy="-7.7739E-17 4.1954E-17 1.8388E-16" />
+		<!-- parent
+		  link="base_link_terabot" / -->
+		<parent
+		  link="${name}_0_link" />
+		<child
+		  link="${name}_1_link" />
+		<axis
+		  xyz="0 0 -1" />
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="2.96706" lower="-2.96706"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+	  </joint>
+		
+	  <transmission name="j1_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_1_joint" />
+		 <actuator name="j1_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${j1_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${j1_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+		
+	  <link
+		name="${name}_2_link">
+		<inertial>
+		  <origin
+			xyz="0.00360761399982772 -0.00661170134938888 0.011819360433878"
+			rpy="0 0 0" />
+		  <mass
+			value="0.514917834480378" />
+		  <inertia
+			ixx="0.00054584574210388"
+			ixy="3.70809510538145E-06"
+			ixz="3.73133401577889E-05"
+			iyy="0.00061754104586304"
+			iyz="2.90057761867086E-05"
+			izz="0.000521943402494022" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link2_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link2_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_2_joint"
+		type="revolute">
+		<origin
+		  xyz="0 0.00939800000000001 0"
+		  rpy="-2.55370805830961E-18 -1.5708 2.39378218480349E-16" />
+		<parent
+		  link="${name}_1_link" />
+		<child
+		  link="${name}_2_link" />
+		<axis
+		  xyz="0 -1 0" />
+		<!-- limit effort="100" velocity="100" upper="0" lower="-1.6557984366"/ -->
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="0" lower="-2.094395102"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+	  </joint>
+	  <transmission name="j2_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_2_joint" />
+		 <actuator name="j2_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${j2_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${j2_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+
+	  <link
+		name="${name}_3_link">
+		<inertial>
+		  <origin
+			xyz="0.15687 -1.7347E-18 0"
+			rpy="0 0 0" />
+		  <mass
+			value="0.80481" />
+		  <inertia
+			ixx="0.00032858"
+			ixy="1.3766E-20"
+			ixz="8.5076E-20"
+			iyy="0.006766"
+			iyz="4.5195E-33"
+			izz="0.006766" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link3_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.50196 0.50196 0.50196 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link3_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_3_joint"
+		type="fixed">
+		<origin
+		  xyz="0.0526796 0 0.0351028"
+		  rpy="1.40354206690261E-18 -1.21049302766977E-16 -6.59624157360192E-19" />
+		<parent
+		  link="${name}_2_link" />
+		<child
+		  link="${name}_3_link" />
+		<axis
+		  xyz="0 0 0" />
+	  </joint>
+
+	  <link
+		name="${name}_4_link">
+		<inertial>
+		  <origin
+			xyz="0.00360761399982767 -0.00661170134938889 0.011819360433878"
+			rpy="0 0 0" />
+		  <mass
+			value="0.514917834480377" />
+		  <inertia
+			ixx="0.000545845742103879"
+			ixy="3.70809510538146E-06"
+			ixz="3.73133401577888E-05"
+			iyy="0.00061754104586304"
+			iyz="2.90057761867086E-05"
+			izz="0.00052194340249402" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link4_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link4_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_4_joint"
+		type="fixed">
+		<origin
+		  xyz="0.36642 0 -0.035103"
+		  rpy="-7.0187E-19 1.1931E-16 -3.1416" />
+		<parent
+		  link="${name}_3_link" />
+		<child
+		  link="${name}_4_link" />
+		<axis
+		  xyz="0 0 0" />
+	  </joint>
+
+	  <link
+		name="${name}_5_link">
+		<inertial>
+		  <origin
+			xyz="0.00396009206422587 -0.00204596321606813 0.00468740955382979"
+			rpy="0 0 0" />
+		  <mass
+			value="0.306377227266223" />
+		  <inertia
+			ixx="0.000228823727490413"
+			ixy="2.48236491046025E-06"
+			ixz="3.82925400547741E-05"
+			iyy="0.000279893828628435"
+			iyz="2.93789992467469E-06"
+			izz="0.000215727716562232" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link5_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.501960784313725 0.501960784313725 1 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link5_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_5_joint"
+		type="revolute">
+		<origin
+		  xyz="0 0.0582295 0"
+		  rpy="-5.88385113537159E-18 -1.1651481832801E-13 -3.14159265358979" />
+		<parent
+		  link="${name}_4_link" />
+		<child
+		  link="${name}_5_link" />
+		<axis
+		  xyz="0 -1 0" />
+		<!-- limit effort="100" velocity="100" upper="2.96705" lower="-2.82743"/ -->
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="2.79208312055332" lower="-2.7928224140"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+	  </joint>
+	  <transmission name="j5_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_5_joint" />
+		 <actuator name="j5_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${j5_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${j5_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+
+	  <link
+		name="${name}_6_link">
+		<inertial>
+		  <origin
+			xyz="0.13782 1.3878E-17 -2.7756E-17"
+			rpy="0 0 0" />
+		  <mass
+			value="0.49365" />
+		  <inertia
+			ixx="0.00014071"
+			ixy="-2.2644E-20"
+			ixz="3.7837E-20"
+			iyy="0.0031959"
+			iyz="5.662E-32"
+			izz="0.0031959" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link6_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.50196 0.50196 0.50196 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link6_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_6_joint"
+		type="fixed">
+		<origin
+		  xyz="0.04445 0 0.035103"
+		  rpy="-1.3632E-16 1.1663E-13 -1.5728E-29" />
+		<parent
+		  link="${name}_5_link" />
+		<child
+		  link="${name}_6_link" />
+		<axis
+		  xyz="0 0 0" />
+	  </joint>
+		
+	  <link
+		name="${name}_7_link">
+		<inertial>
+		  <origin
+			xyz="-0.00373246826278584 -0.00487492974322868 0.00828543325408726"
+			rpy="0 0 0" />
+		  <mass
+			value="0.28946235297199" />
+		  <inertia
+			ixx="0.00020686291669505"
+			ixy="-8.44907042573481E-07"
+			ixz="-2.05362199435504E-05"
+			iyy="0.000242748125008776"
+			iyz="9.93297893033502E-06"
+			izz="0.000201191399295878" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link7_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.501960784313725 0 0 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link7_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_7_joint"
+		type="fixed">
+		<origin
+		  xyz="0.32009 0 -0.028753"
+		  rpy="2.2039E-16 -4.9001E-17 -3.3933E-16" />
+		<parent
+		  link="${name}_6_link" />
+		<child
+		  link="${name}_7_link" />
+		<axis
+		  xyz="0 0 0" />
+	  </joint>
+	  <link
+		name="${name}_8_link">
+		<inertial>
+		  <origin
+			xyz="0.0 0.0 0.0"
+			rpy="0 0 0" />
+		  <mass
+			value="0.5" />
+		  <inertia
+			ixx="0.5"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="0.5"
+			iyz="0.0"
+			izz="0.5" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link8_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0 0.75294 0 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link8_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_8_joint"
+		type="revolute">
+		<origin
+		  xyz="0 0.04699 0"
+		  rpy="-2.759E-16 4.5532E-17 0" />
+		<parent
+		  link="${name}_7_link" />
+		<child
+		  link="${name}_8_link" />
+		<axis
+		  xyz="0 -1 0" />
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="2.26987185" lower="-2.616921"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+	  </joint>
+
+	  <transmission name="j8_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_8_joint" />
+		 <actuator name="j8_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${j8_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${j8_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+
+	  <link
+		name="${name}_9_link">
+		<inertial>
+		  <origin
+			xyz="0.0 0.0 0.0"
+			rpy="0 0 0" />
+		  <mass
+			value="0.2735" />
+		  <inertia
+			ixx="0.2735"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="0.2735"
+			iyz="0.0"
+			izz="0.2735" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.79216 0.81961 0.93333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9_terabot.dae" />
+		  </geometry>
+		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_9_joint"
+		type="revolute">
+		<origin
+		  xyz="0.0769366 0 0.0328168"
+		  rpy="3.14159265359 0 0" />
+		<parent
+		  link="${name}_8_link" />
+		<child
+		  link="${name}_9_link" />
+		<axis
+		  xyz="1 0 0" />
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="2.791663" lower="-2.791663"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
+	  </joint>
+
+	  <transmission name="j9_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_9_joint" />
+		 <actuator name="j9_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${j9_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${j9_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+
+	  <link
+		name="${name}_91_link">
+
+		<inertial>
+		  <origin
+			xyz="0.0 0.0 0.0"
+			rpy="0 0 0" />
+		  <mass
+			value="0.03" />
+		  <inertia
+			ixx="0.03"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="0.03"
+			iyz="0.0"
+			izz="0.03" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9-1_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9-1_terabot.dae" />
+		  </geometry>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_91_joint"
+		type="revolute">
+		<origin
+		  xyz="0.097993 0.028575 0"
+		  rpy="3.0028E-16 5.9154E-22 2.2204E-16" />
+		<parent
+		  link="${name}_9_link" />
+		<child
+		  link="${name}_91_link" />
+		<axis
+		  xyz="0 0 -1" />
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="1.0" lower="-1.0"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>    
+	  </joint>
+	  
+	  <transmission name="j91_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_91_joint" />
+		 <actuator name="j91_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${finger_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${finger_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+
+	  <link
+		name="${name}_92_link">
+		<inertial>
+		  <origin
+			xyz="0.0 0.0 0.0"
+			rpy="0 0 0" />
+		  <mass
+			value="0.03" />
+		  <inertia
+			ixx="0.03"
+			ixy="0.0"
+			ixz="0.0"
+			iyy="0.03"
+			iyz="0.0"
+			izz="0.03" />
+		</inertial>
+		<visual>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9-2_terabot.dae" />
+		  </geometry>
+		  <material
+			name="">
+			<color
+			  rgba="0.792156862745098 0.819607843137255 0.933333333333333 1" />
+		  </material>
+		</visual>
+		<collision>
+		  <origin
+			xyz="0 0 0"
+			rpy="0 0 0" />
+		  <geometry>
+			<mesh
+			  filename="package://terabot_description/meshes/Link9-2_terabot.dae" />
+		  </geometry>
+		</collision>
+	  </link>
+	  <joint
+		name="${name}_92_joint"
+		type="revolute">
+		<origin
+		  xyz="0.097993 -0.028575 0"
+		  rpy="3.0028E-16 7.477E-22 -5.1764E-15" />
+		<parent
+		  link="${name}_9_link" />
+		<child
+		  link="${name}_92_link" />
+		<axis
+		  xyz="0 0 -1" />
+		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="1.0" lower="-1.0"/>
+		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>    
+	  </joint>
+
+	  <transmission name="j92_trans">
+		 <type>transmission_interface/SimpleTransmission</type>
+		 <joint name="${name}_92_joint" />
+		 <actuator name="j92_motor">
+			<hardwareInterface>EffortJointInterface</hardwareInterface>
+			<mechanicalReduction>${finger_mechanical_reduction}</mechanicalReduction>
+			<motorTorqueConstant>${finger_motor_torque_constant}</motorTorqueConstant>
+		 </actuator>	 
+	  </transmission>
+		
+	<!-- extensions -->
+	<xacro:terabot_gazebo name="${name}" />
+	<!-- TCP management -->
+		
+  </xacro:macro>
+  
+
+</robot>
