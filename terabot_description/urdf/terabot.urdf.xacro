@@ -1,37 +1,36 @@
 <?xml version="1.0"?>
 <robot name="terabot" xmlns:xacro="http://www.ros.org/wiki/xacro"> 
 
-   <!-- TERABOT_ARM -->
-   
-  <!-- Import all Gazebo-customization elements, including Gazebo colors -->
-  <xacro:include filename="$(find terabot_description)/urdf/terabot.gazebo.xacro" />
-  <!--xacro:include filename="$(find terabot_description)/urdf/tcp.urdf.xacro" /-->
+<!-- TERABOT_ARM -->
+
+<!-- Import all Gazebo-customization elements, including Gazebo colors -->
+<xacro:include filename="$(find terabot_description)/urdf/terabot.gazebo.xacro" />
+<!--xacro:include filename="$(find terabot_description)/urdf/tcp.urdf.xacro" /-->
 
 
-  <!-- Constants for robot dimensions -->
-  <xacro:property name="PI" value="3.1415926535897931"/>
+<!-- Constants for robot dimensions -->
+<xacro:property name="PI" value="3.1415926535897931"/>
 
-  <xacro:property name="j1_mechanical_reduction" value="250.0"/>
-  <xacro:property name="j1_motor_torque_constant" value="5.0"/>
-  <xacro:property name="j2_mechanical_reduction" value="250.0"/>
-  <xacro:property name="j2_motor_torque_constant" value="5.0"/>
-  <xacro:property name="j5_mechanical_reduction" value="250.0"/>
-  <xacro:property name="j5_motor_torque_constant" value="5.0"/>
-  <xacro:property name="j8_mechanical_reduction" value="1"/>
-  <xacro:property name="j8_motor_torque_constant" value="1"/>
-  <xacro:property name="j9_mechanical_reduction" value="250.0"/>
-  <xacro:property name="j9_motor_torque_constant" value="5.0"/>
-  <xacro:property name="finger_mechanical_reduction" value="1.0"/>
-  <xacro:property name="finger_motor_torque_constant" value="1.0"/>
-  <xacro:property name="joint_effort_limit" value="100.0"/>
-  <xacro:property name="joint_velocity_limit" value="3.0"/>
-  <xacro:property name="joint_damping" value="0.5"/>
-  <xacro:property name="joint_friction" value="0.5"/>
+<xacro:property name="j1_mechanical_reduction" value="250.0"/>
+<xacro:property name="j1_motor_torque_constant" value="5.0"/>
+<xacro:property name="j2_mechanical_reduction" value="250.0"/>
+<xacro:property name="j2_motor_torque_constant" value="5.0"/>
+<xacro:property name="j5_mechanical_reduction" value="250.0"/>
+<xacro:property name="j5_motor_torque_constant" value="5.0"/>
+<xacro:property name="j8_mechanical_reduction" value="1"/>
+<xacro:property name="j8_motor_torque_constant" value="1"/>
+<xacro:property name="j9_mechanical_reduction" value="250.0"/>
+<xacro:property name="j9_motor_torque_constant" value="5.0"/>
+<xacro:property name="finger_mechanical_reduction" value="1.0"/>
+<xacro:property name="finger_motor_torque_constant" value="1.0"/>
+<xacro:property name="joint_effort_limit" value="100.0"/>
+<xacro:property name="joint_velocity_limit" value="3.0"/>
+<xacro:property name="joint_damping" value="0.5"/>
+<xacro:property name="joint_friction" value="0.5"/>
   
-  <xacro:macro name="terabot" params="parent name">  
+<xacro:macro name="terabot" params="parent name">  
 
-	  <link
-		name="${name}_0_link">
+	  <link	name="${name}_0_link">
 		<inertial>
 		  <origin
 			xyz="-0.047561 0.016332 0.034298"
@@ -71,9 +70,7 @@
 		</collision>
 	  </link>
 		
-	  <joint
-		name="${name}_0_joint"
-		type="fixed">
+	  <joint name="${name}_0_joint"	type="fixed">
 		<origin
 		  xyz="0.0 0.0 0.0"
 		  rpy="0.0 0.0 0.0" />
@@ -85,8 +82,7 @@
 		  xyz="0 0 0" />
 	  </joint>
 
-	  <link 
-		name="${name}_1_link">
+	  <link name="${name}_1_link">
 		<inertial>
 		  <origin
 			xyz="-7.6546E-08 0.040344 -0.04514"
@@ -126,9 +122,8 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_1_joint"
-		type="revolute">
+	  
+	  <joint name="${name}_1_joint" type="revolute">
 		<origin
 		  xyz="0 0 0.19178"
 		  rpy="-7.7739E-17 4.1954E-17 1.8388E-16" />
@@ -154,8 +149,7 @@
 		 </actuator>	 
 	  </transmission>
 		
-	  <link
-		name="${name}_2_link">
+	  <link	name="${name}_2_link">
 		<inertial>
 		  <origin
 			xyz="0.00360761399982772 -0.00661170134938888 0.011819360433878"
@@ -195,9 +189,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_2_joint"
-		type="revolute">
+	  <joint name="${name}_2_joint"	type="revolute">
 		<origin
 		  xyz="0 0.00939800000000001 0"
 		  rpy="-2.55370805830961E-18 -1.5708 2.39378218480349E-16" />
@@ -207,7 +199,6 @@
 		  link="${name}_2_link" />
 		<axis
 		  xyz="0 -1 0" />
-		<!-- limit effort="100" velocity="100" upper="0" lower="-1.6557984366"/ -->
 		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="0" lower="-2.094395102"/>
 		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
 	  </joint>
@@ -221,8 +212,7 @@
 		 </actuator>	 
 	  </transmission>
 
-	  <link
-		name="${name}_3_link">
+	  <link name="${name}_3_link">
 		<inertial>
 		  <origin
 			xyz="0.15687 -1.7347E-18 0"
@@ -262,9 +252,8 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_3_joint"
-		type="fixed">
+	  
+	  <joint name="${name}_3_joint"	type="fixed">
 		<origin
 		  xyz="0.0526796 0 0.0351028"
 		  rpy="1.40354206690261E-18 -1.21049302766977E-16 -6.59624157360192E-19" />
@@ -276,8 +265,7 @@
 		  xyz="0 0 0" />
 	  </joint>
 
-	  <link
-		name="${name}_4_link">
+	  <link	name="${name}_4_link">
 		<inertial>
 		  <origin
 			xyz="0.00360761399982767 -0.00661170134938889 0.011819360433878"
@@ -317,9 +305,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_4_joint"
-		type="fixed">
+	  <joint name="${name}_4_joint" type="fixed">
 		<origin
 		  xyz="0.36642 0 -0.035103"
 		  rpy="-7.0187E-19 1.1931E-16 -3.1416" />
@@ -331,8 +317,7 @@
 		  xyz="0 0 0" />
 	  </joint>
 
-	  <link
-		name="${name}_5_link">
+	  <link	name="${name}_5_link">
 		<inertial>
 		  <origin
 			xyz="0.00396009206422587 -0.00204596321606813 0.00468740955382979"
@@ -372,9 +357,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_5_joint"
-		type="revolute">
+	  <joint name="${name}_5_joint"	type="revolute">
 		<origin
 		  xyz="0 0.0582295 0"
 		  rpy="-5.88385113537159E-18 -1.1651481832801E-13 -3.14159265358979" />
@@ -384,7 +367,7 @@
 		  link="${name}_5_link" />
 		<axis
 		  xyz="0 -1 0" />
-		<!-- limit effort="100" velocity="100" upper="2.96705" lower="-2.82743"/ -->
+		
 		<limit effort="${joint_effort_limit}" velocity="${joint_velocity_limit}" upper="2.79208312055332" lower="-2.7928224140"/>
 		<dynamics damping="${joint_damping}" friction="${joint_friction}"/>
 	  </joint>
@@ -398,8 +381,7 @@
 		 </actuator>	 
 	  </transmission>
 
-	  <link
-		name="${name}_6_link">
+	  <link	name="${name}_6_link">
 		<inertial>
 		  <origin
 			xyz="0.13782 1.3878E-17 -2.7756E-17"
@@ -439,9 +421,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_6_joint"
-		type="fixed">
+	  <joint name="${name}_6_joint"	type="fixed">
 		<origin
 		  xyz="0.04445 0 0.035103"
 		  rpy="-1.3632E-16 1.1663E-13 -1.5728E-29" />
@@ -453,8 +433,7 @@
 		  xyz="0 0 0" />
 	  </joint>
 		
-	  <link
-		name="${name}_7_link">
+	  <link	name="${name}_7_link">
 		<inertial>
 		  <origin
 			xyz="-0.00373246826278584 -0.00487492974322868 0.00828543325408726"
@@ -494,9 +473,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_7_joint"
-		type="fixed">
+	  <joint name="${name}_7_joint"	type="fixed">
 		<origin
 		  xyz="0.32009 0 -0.028753"
 		  rpy="2.2039E-16 -4.9001E-17 -3.3933E-16" />
@@ -548,9 +525,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_8_joint"
-		type="revolute">
+	  <joint name="${name}_8_joint"	type="revolute">
 		<origin
 		  xyz="0 0.04699 0"
 		  rpy="-2.759E-16 4.5532E-17 0" />
@@ -574,8 +549,7 @@
 		 </actuator>	 
 	  </transmission>
 
-	  <link
-		name="${name}_9_link">
+	  <link name="${name}_9_link">
 		<inertial>
 		  <origin
 			xyz="0.0 0.0 0.0"
@@ -615,9 +589,7 @@
 		  <contact_coefficients kd="1.0" kp="1000.0" mu="0"/>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_9_joint"
-		type="revolute">
+	  <joint name="${name}_9_joint" type="revolute">
 		<origin
 		  xyz="0.0769366 0 0.0328168"
 		  rpy="3.14159265359 0 0" />
@@ -641,8 +613,7 @@
 		 </actuator>	 
 	  </transmission>
 
-	  <link
-		name="${name}_91_link">
+	  <link name="${name}_91_link">
 
 		<inertial>
 		  <origin
@@ -682,8 +653,7 @@
 		  </geometry>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_91_joint"
+	  <joint name="${name}_91_joint"
 		type="revolute">
 		<origin
 		  xyz="0.097993 0.028575 0"
@@ -708,8 +678,7 @@
 		 </actuator>	 
 	  </transmission>
 
-	  <link
-		name="${name}_92_link">
+	  <link	name="${name}_92_link">
 		<inertial>
 		  <origin
 			xyz="0.0 0.0 0.0"
@@ -748,9 +717,7 @@
 		  </geometry>
 		</collision>
 	  </link>
-	  <joint
-		name="${name}_92_joint"
-		type="revolute">
+	  <joint name="${name}_92_joint" type="revolute">
 		<origin
 		  xyz="0.097993 -0.028575 0"
 		  rpy="3.0028E-16 7.477E-22 -5.1764E-15" />
@@ -775,10 +742,10 @@
 	  </transmission>
 		
 	<!-- extensions -->
-	<xacro:terabot_gazebo name="${name}" />
+	<!--xacro:terabot_gazebo name="${name}" /-->
 	<!-- TCP management -->
 		
-  </xacro:macro>
+</xacro:macro>
   
 
 </robot>
