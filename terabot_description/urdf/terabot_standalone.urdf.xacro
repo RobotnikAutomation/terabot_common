@@ -44,6 +44,6 @@
   
   <xacro:terabot name="terabot" parent="base_link" />
   
-  <xacro:ros_control namespace="/terabot"/>
+  <xacro:ros_control_terabot namespace="/terabot"/>
 
 </robot>
