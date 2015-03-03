@@ -28,7 +28,7 @@
 <xacro:property name="joint_damping" value="0.5"/>
 <xacro:property name="joint_friction" value="0.5"/>
   
-<xacro:macro name="terabot" params="parent name">  
+<xacro:macro name="terabot" params="parent name *origin">  
 
 	  <link	name="${name}_0_link">
 		<inertial>
@@ -71,9 +71,7 @@
 	  </link>
 		
 	  <joint name="${name}_0_joint"	type="fixed">
-		<origin
-		  xyz="0.0 0.0 0.0"
-		  rpy="0.0 0.0 0.0" />
+		<insert_block name="origin" />
 		<parent
 		  link="${parent}" />
 		<child

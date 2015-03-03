@@ -42,8 +42,11 @@
 	<link name="base_link">
 	</link>
   
-  <xacro:terabot name="terabot" parent="base_link" />
+  <xacro:terabot name="terabot" parent="base_link">
+	  <origin xyz="0 0 0" rpy="0 0 0"/>
+  </xacro:terabot>
   
   <xacro:ros_control_terabot namespace="/terabot"/>
+	
 
 </robot>
